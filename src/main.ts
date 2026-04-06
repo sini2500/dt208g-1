@@ -57,17 +57,21 @@ function render(): void {
 
   courses.forEach(course => {
     const div = document.createElement("div");
+    div.classList.add("course-card");
 
     // mall för kurs-kort
     div.innerHTML = `
       <h3>${course.name} (${course.code})</h3>
       <p>Progression: ${course.progression}</p>
-      <a href="${course.syllabus}" target="_blank">Kursplan</a>
-      <br/>
-      <button data-code="${course.code}">Radera</button>
+      <div>
+        <a href="${course.syllabus}" target="_blank"><button>Kursplan &#8663;</button></a>
+        <button class="delete" data-code="${course.code}">Radera X</button>
+      </div>
     `;
 
-    div.querySelector("button")?.addEventListener("click", () => {
+    // bara lyssna på klick om knappen har class delete.
+    const deleteBtn = div.querySelector("button.delete");
+    deleteBtn?.addEventListener("click", () => {
       deleteCourse(course.code);
     });
 

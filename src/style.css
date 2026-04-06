@@ -5,7 +5,7 @@
 }
 
 body {
-  font-style: 18px/145%; 
+  font-size: 18px;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.5;
   color: #08060d;
@@ -13,37 +13,132 @@ body {
 }
 
 #app {
-  width: 960px;
+  width: 900px;
   max-width: 100%;
   margin: 2rem auto;
   padding: 2rem;
   text-align: center;
-  border-inline: 1px solid #e5e4e7;
+  border: 1px solid #e5e4e7;
+  border-radius: 12px;
   min-height: 50vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
+h1 {
+  margin-bottom: 1.5rem;
+  font-size: 3rem;
+}
+
+/* Formuläret */
+form {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e5e4e7;
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+input, select {
+  padding: 0.6rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #e5e4e7;
+  font-size: 0.95rem;
+  transition: border 0.2s, box-shadow 0.2s;
+  background-color: #fff;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #08060d;
+  box-shadow: 0 0 0 2px rgba(7, 6, 20, 0.15);
+}
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: none;
+  background: #08060d;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.05s;
+}
+
+button:hover {
+  background: #605d68;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Kurslistan */
 #course-list {
   display: grid;
   gap: 1rem;
-}
-
-form {
-  display: grid;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-div {
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  border-radius: 6px;
 }
 
 @media (min-width: 600px) {
   #course-list {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+@media (min-width: 900px) {
+  #course-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Kurs-kort */
+
+.course-card {
+  background: #fff;
+  border: 1px solid #e5e4e7;
+  border-radius: 12px;
+  padding: 1rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.course-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.course-card p {
+  margin-bottom: 0.25rem;
+}
+
+.course-card a {
+  font-size: 0.95rem;
+  color: #08060d;
+  text-decoration: none;
+}
+
+.course-card a:hover {
+  text-decoration: underline;
+}
+
+.course-card button {
+  margin-top: 0.6rem;
+  height: 42px;
+}
+
+.delete { 
+  background: #ef4444;
+}
+
+.delete:hover {
+  background: #dc2626;
 }
