@@ -1,60 +1,114 @@
-import './style.css'
-import typescriptLogo from './assets/typescript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.ts'
+// hitta DOM-element, dubbelkolla att de är rätt typ
+const form = document.getElementById("course-form") as HTMLFormElement;
+const list = document.getElementById("course-list") as HTMLElement;
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${typescriptLogo}" class="framework" alt="TypeScript logo"/>
-    <img src=${viteLogo} class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.ts</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+// Lista över tillåtna värden för kursprogression, typ sträng.
+const progressions: string[] = ['A', 'B', 'C'];
 
-<div class="ticks"></div>
+// Ett interface för kurser
+interface CourseInfo {
+  code: string;
+  name: string;
+  progression: string;
+  syllabus: string;
+}
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src=${viteLogo} alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://www.typescriptlang.org" target="_blank">
-          <img class="button-icon" src="${typescriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+// hämta eventuella kurser från localstorage när sidan laddar, tom array om inga finns
+let courses: CourseInfo[] = loadCourses();
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+// hämta kurser från localstorage
+function loadCourses(): CourseInfo[] {
+  const data = localStorage.getItem("courses");
+  return data ? JSON.parse(data) : [];
+}
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// spara den aktuella arrayen med kurser i localstorage
+function saveCourses(): void {
+  localStorage.setItem("courses", JSON.stringify(courses));
+}
+
+// se om en kurskod redan används
+function checkUnique(code: string): boolean {
+  return !courses.some(c => c.code === code);
+}
+
+// se om givet värde finns i tillåtna progression
+function checkProgression(value: string): boolean {
+  return progressions.includes(value);
+}
+
+// spara kurs och rendera om vyn
+function addCourse(course: CourseInfo): void {
+  courses.push(course);
+  saveCourses();
+  render();
+}
+
+// ta bort kurs med angiven kurskod och rendera om vyn
+function deleteCourse(code: string): void {
+  courses = courses.filter(c => c.code !== code);
+  saveCourses();
+  render();
+}
+
+// Rendera alla kurser
+function render(): void {
+  list.innerHTML = "";
+
+  courses.forEach(course => {
+    const div = document.createElement("div");
+
+    // mall för kurs-kort
+    div.innerHTML = `
+      <h3>${course.name} (${course.code})</h3>
+      <p>Progression: ${course.progression}</p>
+      <a href="${course.syllabus}" target="_blank">Kursplan</a>
+      <br/>
+      <button data-code="${course.code}">Radera</button>
+    `;
+
+    div.querySelector("button")?.addEventListener("click", () => {
+      deleteCourse(course.code);
+    });
+
+    list.appendChild(div);
+  });
+}
+
+// Formuläret
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // ta input-värden, men bara om de är input-element
+  const codeInput = (document.getElementById("code") as HTMLInputElement).value;
+  const nameInput = (document.getElementById("name") as HTMLInputElement).value;
+  const progInput = (document.getElementById("progression") as HTMLInputElement).value;
+  const syllabusInput = (document.getElementById("syllabus") as HTMLInputElement).value;
+
+  // kolla att värden är okej
+  if (!checkUnique(codeInput)) {
+    alert("Kurskoden måste vara unik");
+    return;
+  }
+
+  if (!checkProgression(progInput)) {
+    alert("Progression måste vara A, B eller C");
+    return;
+  }
+
+  // skapa ny kurs
+  const newCourse: CourseInfo = {
+    code: codeInput,
+    name: nameInput,
+    progression: progInput,
+    syllabus: syllabusInput,
+  };
+
+  addCourse(newCourse);
+
+  // töm formulär
+  form.reset();
+});
+
+// Rendera vid sidladdning
+render();
