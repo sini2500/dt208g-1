@@ -17,7 +17,14 @@
       <!-- allt required så inget får saknas -->
       <input id="code" placeholder="Kurskod" required />
       <input id="name" placeholder="Kursnamn" required />
-      <input id="progression" placeholder="A / B / C" required />
+
+      <select id="progression" required>
+        <option value="" disabled selected>Välj progression</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+      </select>
+
       <input id="syllabus" placeholder="URL till kursplan" required />
       <button type="submit">Lägg till kurs</button>
     </form>

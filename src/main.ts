@@ -79,10 +79,10 @@ function render(): void {
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  // ta input-värden, men bara om de är input-element
+  // ta input-värden, behandlar elementen som inputElement, inte vanliga HTMLElement (type asert)
   const codeInput = (document.getElementById("code") as HTMLInputElement).value;
   const nameInput = (document.getElementById("name") as HTMLInputElement).value;
-  const progInput = (document.getElementById("progression") as HTMLInputElement).value;
+  const progInput = (document.getElementById("progression") as HTMLSelectElement).value;
   const syllabusInput = (document.getElementById("syllabus") as HTMLInputElement).value;
 
   // kolla att värden är okej
@@ -91,6 +91,7 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
+  // skydd mot att användaren ändrar "value" i select-elementet
   if (!checkProgression(progInput)) {
     alert("Progression måste vara A, B eller C");
     return;

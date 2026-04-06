@@ -12,6 +12,8 @@ Vite används för bygget, och koden är enkel nog att få plats i en main.ts fi
 
 Formulär för input.
 
+Select-fält för att välja progression, enklaste lösningen, med lite extra validering i TS.
+
 Varje kurs presenteras i ett litet kort.
 
 Funktioner för att ladda, spara, lägga till och ta bort kurser från localstorage. 

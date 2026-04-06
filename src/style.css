@@ -19,7 +19,7 @@ body {
   padding: 2rem;
   text-align: center;
   border-inline: 1px solid #e5e4e7;
-  min-height: 100svh;
+  min-height: 50vh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
