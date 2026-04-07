@@ -20,3 +20,6 @@ Funktioner för att ladda, spara, lägga till och ta bort kurser från localstor
 
 Funktioner för att kontrollera om input är korrekt och unik.
 
+---
+
+Lyckades ha fel e-post i git config, så fick chansen att testa git rebase för att lösa det.
